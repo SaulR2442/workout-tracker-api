@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const express = require('express');
 const router = express.Router();
 const { users, workouts } = require('../../data/mockData');
@@ -72,6 +73,29 @@ router.get('/:id/reports', (req, res) => {
     completion_rate: total ? Math.round((completed / total) * 100) : 0,
     generated_at: new Date().toISOString()
   });
+});
+
+
+// POST /api/v1/users
+router.post('/', (req, res) => {
+  const { name, email, experience_level, role } = req.body;
+
+  if (!name || !email) {
+    return res.status(400).json({ error: 'name y email son requeridos' });
+  }
+
+  const newUser = {
+    id: crypto.randomUUID(),
+    name,
+    email,
+    experience_level: experience_level || 'Principiante',
+    role: role || 'user',
+    created_at: new Date().toISOString()
+  };
+
+  users.push(newUser);
+
+  res.status(201).json(newUser);
 });
 
 module.exports = router;
