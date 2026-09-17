@@ -98,4 +98,61 @@ router.post('/', (req, res) => {
   res.status(201).json(newUser);
 });
 
+
+// PUT /api/v1/users/:id (actualizacion completa)
+router.put('/:id', (req, res) => {
+  const { id } = req.params;
+  const { name, email, experience_level, role } = req.body;
+
+  const index = users.findIndex(u => u.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Usuario no encontrado' });
+  }
+
+  if (!name || !email) {
+    return res.status(400).json({ error: 'name y email son requeridos' });
+  }
+
+  users[index] = {
+    ...users[index],
+    name,
+    email,
+    experience_level: experience_level || users[index].experience_level,
+    role: role || users[index].role
+  };
+
+  res.status(200).json(users[index]);
+});
+
+// PATCH /api/v1/users/:id (actualizacion parcial)
+router.patch('/:id', (req, res) => {
+  const { id } = req.params;
+  const { name, email, experience_level, role } = req.body;
+
+  const index = users.findIndex(u => u.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Usuario no encontrado' });
+  }
+
+  if (name) users[index].name = name;
+  if (email) users[index].email = email;
+  if (experience_level) users[index].experience_level = experience_level;
+  if (role) users[index].role = role;
+
+  res.status(200).json(users[index]);
+});
+
+// DELETE /api/v1/users/:id
+router.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  const index = users.findIndex(u => u.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({ error: 'Usuario no encontrado' });
+  }
+
+  users.splice(index, 1);
+  res.status(204).send();
+});
+
 module.exports = router;
