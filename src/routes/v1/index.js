@@ -18,8 +18,10 @@ router.use((req, res, next) => {
 
 //Importar rutas especificas
 const usersRoutes = require('./users.routes');
+const exercisesRoutes = require('./exercises.routes');
 
 //Configurar las rutas
 router.use('/users', usersRoutes);
+router.use('/exercises', exercisesRoutes);
 
 module.exports = router;
