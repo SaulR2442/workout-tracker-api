@@ -34,7 +34,9 @@ let exercises = [
     description: "Ejercicio compuesto para el desarrollo de la fuerza en el tren inferior (cuádriceps e isquiotibiales).",
     category: "Fuerza",
     muscle_group: "Piernas",
-    difficulty_level: "Intermedio"
+    difficulty_level: "Intermedio",
+    weight: 100,
+    reps: 5
   },
   {
     id: 2,
@@ -42,7 +44,9 @@ let exercises = [
     description: "Ejercicio compuesto para pectoral, hombro anterior y tríceps.",
     category: "Fuerza",
     muscle_group: "Pecho",
-    difficulty_level: "Medio"
+    difficulty_level: "Medio",
+    weight: 80,
+    reps: 10
   },
   {
     id: 3,
@@ -50,7 +54,9 @@ let exercises = [
     description: "Ejercicio de fuerza multiarticular para la cadena posterior.",
     category: "Fuerza",
     muscle_group: "Espalda",
-    difficulty_level: "Alto"
+    difficulty_level: "Alto",
+    weight: 120,
+    reps: 5
   },
   {
     id: 4,
@@ -58,7 +64,9 @@ let exercises = [
     description: "Entrenamiento de cardio de moderada a alta intensidad.",
     category: "Cardio",
     muscle_group: "Piernas",
-    difficulty_level: "Bajo"
+    difficulty_level: "Bajo",
+    weight: 0,
+    reps: 30
   },
   {
     id: 5,
@@ -66,7 +74,9 @@ let exercises = [
     description: "Ejercicio isométrico para fortalecer la musculatura del core.",
     category: "Flexibilidad",
     muscle_group: "Abdomen",
-    difficulty_level: "Bajo"
+    difficulty_level: "Bajo",
+    weight: 0,
+    reps: 60
   }
 ];
 

@@ -20,10 +20,12 @@ router.use((req, res, next) => {
 const usersRoutes = require('./users.routes');
 const exercisesRoutes = require('./exercises.routes');
 const workoutsRoutes = require('./workouts.routes');
+const progressRoutes = require('./progress.routes');
 
 //Configurar las rutas
 router.use('/users', usersRoutes);
 router.use('/exercises', exercisesRoutes);
 router.use('/workouts', workoutsRoutes);
+router.use('/progress', progressRoutes);
 
 module.exports = router;
