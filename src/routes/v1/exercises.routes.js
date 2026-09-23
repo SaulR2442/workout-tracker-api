@@ -1,35 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const { exercises } = require('../../data/mockData');
 
-// GET /api/v1/exercises?muscle_group=Piernas&category=Fuerza
-router.get('/', (req, res) => {
-  const { muscle_group, category } = req.query;
-  let result = exercises;
+const {
+  getExercises,
+  getExercisesId,
+  postExercises,
+  putExercise,
+  deleteExercises
+} = require ('../../controllers/exercises.controller')
 
-  if (muscle_group) {
-    result = result.filter(e =>
-      e.muscle_group.toLowerCase() === muscle_group.toLowerCase()
-    );
-  }
+router.get('/', getExercises)
 
-  if (category) {
-    result = result.filter(e => e.category === category);
-  }
+router.get('/id', getExercisesId)
 
-  res.status(200).json(result);
-});
+router.post('/', postExercises)
 
-// GET /api/v1/exercises/:id
-router.get('/:id', (req, res) => {
-  const { id } = req.params;
-  const exercise = exercises.find(e => e.id === Number(id));
+router.put('/', putExercise)
 
-  if (!exercise) {
-    return res.status(404).json({ error: 'Ejercicio no encontrado' });
-  }
-
-  res.status(200).json(exercise);
-});
+router.delete('/', deleteExercises)
 
 module.exports = router;
