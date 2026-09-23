@@ -11,13 +11,13 @@ const {
 
 router.get('/', getProgress)
 
-router.get('/', getProgressId)
+router.get('/id', getProgressId)
 
 router.post('/', postProgress)
 
-router.put('/', putProgress)
+router.put('/id', putProgress)
 
-router.delete('/', deleteProgress)
+router.delete('/id', deleteProgress)
 
 module.exports = router;
 
