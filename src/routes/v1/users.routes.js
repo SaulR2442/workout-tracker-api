@@ -1,158 +1,24 @@
-const crypto = require('crypto');
 const express = require('express');
 const router = express.Router();
-const { users, workouts } = require('../../data/mockData');
 
-// GET /api/v1/users?search=Carlos&role=user&limit=2
-router.get('/', (req, res) => {
-  const { search, role, limit } = req.query;
-  let result = users;
+// Importamos todas las variables
+const {
+  getUsers,
+  getUsersId,
+  postUsers,
+  putUsers,
+  deleteUsers
+} = require('../../controllers/users.controller');
 
-  if (role) {
-    result = result.filter(u => u.role === role);
-  }
+router.get('/', getUsers);
 
-  if (search) {
-    result = result.filter(u =>
-      u.name.toLowerCase().includes(search.toLowerCase())
-    );
-  }
+router.get('/:id', getUsersId);
 
-  if (limit) {
-    result = result.slice(0, Number(limit));
-  }
+router.post('/', postUsers);
 
-  res.status(200).json(result);
-});
+router.put('/:id', putUsers);
 
-// GET /api/v1/users/:id
-router.get('/:id', (req, res) => {
-  const { id } = req.params;
-  const user = users.find(u => u.id === id);
-
-  if (!user) {
-    return res.status(404).json({ error: 'Usuario no encontrado' });
-  }
-
-  res.status(200).json(user);
-});
-
-// GET /api/v1/users/:id/workouts (jerarquico)
-router.get('/:id/workouts', (req, res) => {
-  const { id } = req.params;
-  const user = users.find(u => u.id === id);
-
-  if (!user) {
-    return res.status(404).json({ error: 'Usuario no encontrado' });
-  }
-
-  const userWorkouts = workouts.filter(w => w.user_id === id);
-  res.status(200).json(userWorkouts);
-});
-
-// GET /api/v1/users/:id/reports (jerarquico: informe de progreso)
-router.get('/:id/reports', (req, res) => {
-  const { id } = req.params;
-  const user = users.find(u => u.id === id);
-
-  if (!user) {
-    return res.status(404).json({ error: 'Usuario no encontrado' });
-  }
-
-  const userWorkouts = workouts.filter(w => w.user_id === id);
-  const total = userWorkouts.length;
-  const completed = userWorkouts.filter(w => w.status === 'completado').length;
-
-  res.status(200).json({
-    user_id: id,
-    name: user.name,
-    experience_level: user.experience_level,
-    total_workouts: total,
-    completed_workouts: completed,
-    pending_workouts: total - completed,
-    completion_rate: total ? Math.round((completed / total) * 100) : 0,
-    generated_at: new Date().toISOString()
-  });
-});
-
-
-// POST /api/v1/users
-router.post('/', (req, res) => {
-  const { name, email, experience_level, role } = req.body;
-
-  if (!name || !email) {
-    return res.status(400).json({ error: 'name y email son requeridos' });
-  }
-
-  const newUser = {
-    id: crypto.randomUUID(),
-    name,
-    email,
-    experience_level: experience_level || 'Principiante',
-    role: role || 'user',
-    created_at: new Date().toISOString()
-  };
-
-  users.push(newUser);
-
-  res.status(201).json(newUser);
-});
-
-
-// PUT /api/v1/users/:id (actualizacion completa)
-router.put('/:id', (req, res) => {
-  const { id } = req.params;
-  const { name, email, experience_level, role } = req.body;
-
-  const index = users.findIndex(u => u.id === id);
-  if (index === -1) {
-    return res.status(404).json({ error: 'Usuario no encontrado' });
-  }
-
-  if (!name || !email) {
-    return res.status(400).json({ error: 'name y email son requeridos' });
-  }
-
-  users[index] = {
-    ...users[index],
-    name,
-    email,
-    experience_level: experience_level || users[index].experience_level,
-    role: role || users[index].role
-  };
-
-  res.status(200).json(users[index]);
-});
-
-// PATCH /api/v1/users/:id (actualizacion parcial)
-router.patch('/:id', (req, res) => {
-  const { id } = req.params;
-  const { name, email, experience_level, role } = req.body;
-
-  const index = users.findIndex(u => u.id === id);
-  if (index === -1) {
-    return res.status(404).json({ error: 'Usuario no encontrado' });
-  }
-
-  if (name) users[index].name = name;
-  if (email) users[index].email = email;
-  if (experience_level) users[index].experience_level = experience_level;
-  if (role) users[index].role = role;
-
-  res.status(200).json(users[index]);
-});
-
-// DELETE /api/v1/users/:id
-router.delete('/:id', (req, res) => {
-  const { id } = req.params;
-  const index = users.findIndex(u => u.id === id);
-
-  if (index === -1) {
-    return res.status(404).json({ error: 'Usuario no encontrado' });
-  }
-
-  users.splice(index, 1);
-  res.status(204).send();
-});
+router.delete('/:id', deleteUsers);
 
 module.exports = router;
+
