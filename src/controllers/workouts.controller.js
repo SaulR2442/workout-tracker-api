@@ -42,7 +42,7 @@ const postWorkouts = ((req, res) => {
     scheduled_date,
     status,
     comments,
-    created_at: new Date().toISOString()
+    createcreated_at: new Date().toISOString()
   };
 
   workouts.push(newWorkouts);   // 4
