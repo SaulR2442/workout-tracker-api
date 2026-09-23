@@ -15,8 +15,8 @@ router.get('/id', getExercisesId)
 
 router.post('/', postExercises)
 
-router.put('/', putExercise)
+router.put('/id', putExercise)
 
-router.delete('/', deleteExercises)
+router.delete('/id', deleteExercises)
 
 module.exports = router;
