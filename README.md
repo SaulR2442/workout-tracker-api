@@ -1,8 +1,6 @@
 # Workout Tracker API
 
-API RESTful construida con **Node.js** y **Express** para gestionar usuarios, rutinas, ejercicios y registros de progreso. Basada en el documento *Diseño Conceptual de API RESTful: Workout Tracker*.
-
-> **Nota:** La API no utiliza base de datos ni validaciones complejas. Todo el estado se almacena en memoria (`src/data/mockData.js`), por lo que los datos se reinician al reiniciar el servidor.
+API RESTful construida con **Node.js** y **Express** para gestionar usuarios, ejercicios, entrenamientos y registros de progreso. Datos almacenados en memoria (se reinician al reiniciar el servidor).
 
 ## Inicialización
 
@@ -14,202 +12,187 @@ npm start        # producción
 
 El servidor levanta en `http://localhost:8000` (puerto configurable en `.env`).
 
-## Estructura del proyecto
-
-```
-src/
-├── app.js                  # Bootstrap de Express y registro de rutas /api
-├── config/
-│   └── env.js              # Carga de variables de entorno
-├── data/
-│   └── mockData.js         # Almacenamiento en memoria (users, exercises, workouts, workout_exercises)
-└── routes/
-    ├── index.js            # Enrutador raíz /api
-    └── v1/
-        ├── index.js        # Prefijo /v1 + cabeceras globales (X-API-Version, X-Request-Id)
-        ├── users.routes.js
-        ├── exercises.routes.js
-        └── workouts.routes.js
-```
-
 ## Endpoints
 
 Todos los endpoints usan el prefijo `/api/v1`.
 
-| Módulo | Método | URI | Descripción | Estados |
+| Recurso | Método | URI | Descripción | Estados |
 |---|---|---|---|---|
-| Usuarios | GET | `/users` | Lista usuarios. Filtros: `?search=`, `?role=`, `?limit=` | 200 |
-| Usuarios | GET | `/users/:id` | Detalle de un usuario por ID | 200, 404 |
-| Usuarios | GET | `/users/:id/workouts` | Jerárquico: entrenamientos del usuario | 200, 404 |
-| Usuarios | GET | `/users/:id/reports` | Jerárquico: informe/métricas de progreso | 200, 404 |
-| Usuarios | POST | `/users` | Registra un usuario nuevo | 201, 400 |
-| Usuarios | PUT | `/users/:id` | Actualización completa del usuario | 200, 400, 404 |
-| Usuarios | PATCH | `/users/:id` | Actualización parcial del usuario | 200, 404 |
-| Usuarios | DELETE | `/users/:id` | Elimina un usuario | 204, 404 |
-| Ejercicios | GET | `/exercises` | Lista catálogo. Filtros: `?muscle_group=`, `?category=` | 200 |
-| Ejercicios | GET | `/exercises/:id` | Detalle de un ejercicio | 200, 404 |
-| Entrenamientos | GET | `/workouts` | Lista entrenamientos. Filtros: `?status=`, `?user_id=`, `?limit=` | 200 |
-| Entrenamientos | GET | `/workouts/:id` | Detalle con ejercicios anidados y HATEOAS | 200, 404 |
-| Entrenamientos | POST | `/workouts` | Crea un entrenamiento en blanco | 201, 400, 404 |
-| Entrenamientos | PUT | `/workouts/:id` | Actualiza metadatos completos | 200, 400, 404 |
-| Entrenamientos | PATCH | `/workouts/:id` | Actualización parcial (status, fecha, etc.) | 200, 404 |
-| Entrenamientos | DELETE | `/workouts/:id` | Elimina un entrenamiento y sus ejercicios | 204, 404 |
-| Entrenamientos | POST | `/workouts/:id/exercises` | Jerárquico: añade ejercicio con sets, reps y peso | 201, 400, 404 |
+| Usuarios | GET | `/api/v1/users` | Lista usuarios. Filtros: `?search=`, `?role=`, `?limit=` | 200 |
+| Usuarios | GET | `/api/v1/users/id` | Obtiene usuario por ID (literal `/id`, no `/:id`) | 200, 404 |
+| Usuarios | POST | `/api/v1/users` | Crea un usuario nuevo. Requiere `name`, `email` | 201, 400 |
+| Usuarios | PUT | `/api/v1/users/id` | Actualización completa del usuario. Requiere `name`, `email` | 200, 400, 404 |
+| Usuarios | PATCH | `/api/v1/users/id` | Actualización parcial del usuario | 200, 404 |
+| Usuarios | DELETE | `/api/v1/users/id` | Elimina un usuario | 204, 404 |
+| Ejercicios | GET | `/api/v1/exercises` | Lista catálogo. Filtros: `?muscle_group=`, `?category=` | 200 |
+| Ejercicios | GET | `/api/v1/exercises/id` | Obtiene ejercicio por ID | 200, 404 |
+| Ejercicios | POST | `/api/v1/exercises` | Crea un ejercicio nuevo. Todos los campos requeridos | 201, 400 |
+| Ejercicios | PUT | `/api/v1/exercises/id` | Actualización completa del ejercicio | 200, 400, 404 |
+| Ejercicios | PATCH | `/api/v1/exercises/id` | Actualización parcial del ejercicio | 200, 404 |
+| Ejercicios | DELETE | `/api/v1/exercises/id` | Elimina un ejercicio | 204, 404 |
+| Workouts | GET | `/api/v1/workouts` | Lista entrenamientos. Filtros: `?status=`, `?user_id=`, `?limit=` | 200 |
+| Workouts | GET | `/api/v1/workouts/id` | Obtiene entrenamiento por ID (con ejercicios anidados, HATEOAS) | 200, 404 |
+| Workouts | POST | `/api/v1/workouts` | Crea un entrenamiento nuevo. Requiere `name`, `status` | 201, 400 |
+| Workouts | PUT | `/api/v1/workouts/id` | Actualización completa del entrenamiento | 200, 400, 404 |
+| Workouts | PATCH | `/api/v1/workouts/id` | Actualización parcial del entrenamiento | 200, 404 |
+| Workouts | DELETE | `/api/v1/workouts/id` | Elimina entrenamiento y sus ejercicios | 204, 404 |
+| Progress | GET | `/api/v1/progress` | Lista registros de progreso | 200 |
+| Progress | GET | `/api/v1/progress/id` | Obtiene registro por ID | 200, 404 |
+| Progress | POST | `/api/v1/progress` | Crea registro de progreso. Requiere `sets`, `weight`, `repetitions` | 201, 400 |
+| Progress | PUT | `/api/v1/progress/id` | Actualización completa del progreso | 200, 400, 404 |
+| Progress | PATCH | `/api/v1/progress/id` | Actualización parcial del progreso | 200, 404 |
+| Progress | DELETE | `/api/v1/progress/id` | Elimina registro de progreso | 204, 404 |
+
+**Notas sobre las rutas:**
+- Todas las rutas de ID usan literal `/id` en lugar de `/:id` (ej. `/api/v1/users/id`)
+- Los endpoints jerárquicos `/users/:id/workouts`, `/users/:id/reports`, `/workouts/:id/exercises` están documentados pero **no implementados** en el código
 
 ## Ejemplos de request/response
 
-### GET /api/v1/users
-
-```
-GET /api/v1/users?role=user
-```
+### GET /api/v1/users?search=John
 
 ```json
 200 OK
 [
   {
-    "id": "b42f53fa-7b30-4b91-8d36-dc1c6ef27611",
-    "name": "Carlos Navia",
-    "email": "carlos@example.com",
-    "experience_level": "Intermedio",
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
     "role": "user",
-    "created_at": "2025-09-12T12:00:00Z"
-  },
-  {
-    "id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
-    "name": "Ana Gómez",
-    "email": "ana@example.com",
-    "experience_level": "Principiante",
-    "role": "user",
-    "created_at": "2026-09-15T09:00:00Z"
+    "createdAt": "2024-01-15T10:30:00.000Z",
+    "updatedAt": "2024-01-15T10:30:00.000Z"
   }
 ]
 ```
 
 ### POST /api/v1/users
 
-```
+```json
 POST /api/v1/users
 Content-Type: application/json
 
-{ "name": "Lucía Torres", "email": "lucia@example.com", "experience_level": "Principiante" }
+{
+  "name": "John Doe",
+  "email": "john@example.com"
+}
 ```
 
 ```json
 201 Created
 {
-  "id": "8f9b2c1e-4a6d-4f0e-9c3b-7d5a1e8f2b60",
-  "name": "Lucía Torres",
-  "email": "lucia@example.com",
-  "experience_level": "Principiante",
+  "id": 1,
+  "name": "John Doe",
+  "email": "john@example.com",
   "role": "user",
-  "created_at": "2026-09-17T10:15:00Z"
+  "createdAt": "2024-01-15T10:30:00.000Z",
+  "updatedAt": "2024-01-15T10:30:00.000Z"
 }
 ```
 
-### GET /api/v1/workouts/105
-
-```
-GET /api/v1/workouts/105
-```
+### POST /api/v1/exercises
 
 ```json
-200 OK
-{
-  "id": 105,
-  "user_id": "e3b0c442-8c15-47b3-be41-000000000012",
-  "name": "Día de Pierna Pesado",
-  "scheduled_date": "2026-09-12T18:00:00Z",
-  "status": "completado",
-  "comments": "Enfocarse en mantener la técnica de espalda recta en la sentadilla.",
-  "created_at": "2026-09-10T08:30:00Z",
-  "exercises": [
-    {
-      "workout_exercise_id": 301,
-      "exercise_id": 1,
-      "name": "Sentadilla libre",
-      "sets": 4,
-      "repetitions": 8,
-      "weight": 100.5
-    }
-  ],
-  "_links": {
-    "self": { "href": "/api/v1/workouts/105", "method": "GET" },
-    "user_owner": { "href": "/api/v1/users/e3b0c442-8c15-47b3-be41-000000000012", "method": "GET" },
-    "add_exercise": { "href": "/api/v1/workouts/105/exercises", "method": "POST" },
-    "progress_reports": { "href": "/api/v1/users/e3b0c442-8c15-47b3-be41-000000000012/reports", "method": "GET" }
-  }
-}
-```
-
-### POST /api/v1/workouts/106/exercises
-
-```
-POST /api/v1/workouts/106/exercises
+POST /api/v1/exercises
 Content-Type: application/json
 
-{ "exercise_id": 5, "sets": 3, "repetitions": 15, "weight": 0 }
+{
+  "name": "Bench Press",
+  "description": "Chest exercise",
+  "category": "strength",
+  "muscle_group": "chest",
+  "difficulty_level": "intermediate"
+}
 ```
 
 ```json
 201 Created
 {
-  "workout_exercise_id": 304,
-  "exercise_id": 5,
-  "name": "Plancha Abdominal",
-  "sets": 3,
-  "repetitions": 15,
-  "weight": 0
+  "id": 1,
+  "name": "Bench Press",
+  "description": "Chest exercise",
+  "category": "strength",
+  "muscle_group": "chest",
+  "difficulty_level": "intermediate",
+  "createdAt": "2024-01-15T10:30:00.000Z",
+  "updatedAt": "2024-01-15T10:30:00.000Z"
 }
 ```
 
-### GET /api/v1/users/:id/reports
+### POST /api/v1/workouts
 
-```
-GET /api/v1/users/e3b0c442-8c15-47b3-be41-000000000012/reports
+```json
+POST /api/v1/workouts
+Content-Type: application/json
+
+{
+  "name": "Chest Day",
+  "status": "completed"
+}
 ```
 
 ```json
-200 OK
+201 Created
 {
-  "user_id": "e3b0c442-8c15-47b3-be41-000000000012",
-  "name": "Saúl Ramírez",
-  "experience_level": "Avanzado",
-  "total_workouts": 2,
-  "completed_workouts": 1,
-  "pending_workouts": 1,
-  "completion_rate": 50,
-  "generated_at": "2026-09-17T10:20:00Z"
+  "id": 1,
+  "name": "Chest Day",
+  "status": "completed",
+  "userId": 1,
+  "exercises": [],
+  "_links": {
+    "self": { "href": "/api/v1/workouts/1" },
+    "user": { "href": "/api/v1/users/1" }
+  },
+  "createdAt": "2024-01-15T10:30:00.000Z",
+  "updatedAt": "2024-01-15T10:30:00.000Z"
 }
 ```
 
-### DELETE /api/v1/workouts/:id
+### POST /api/v1/progress
 
-```
-DELETE /api/v1/workouts/107
+```json
+POST /api/v1/progress
+Content-Type: application/json
+
+{
+  "sets": 3,
+  "weight": 80,
+  "repetitions": 10,
+  "workoutId": 1,
+  "userId": 1
+}
 ```
 
-```
-204 No Content (sin cuerpo de respuesta)
+```json
+201 Created
+{
+  "id": 1,
+  "sets": 3,
+  "weight": 80,
+  "repetitions": 10,
+  "workoutId": 1,
+  "userId": 1,
+  "createdAt": "2024-01-15T10:30:00.000Z"
+}
 ```
 
 ## Códigos de estado HTTP aplicados
 
 | Estado | Descripción |
 |---|---|
-| 200 OK | Éxito general (GET, PUT, PATCH) |
-| 201 Created | Creación de recursos (POST) |
-| 204 No Content | Eliminación exitosa (DELETE) |
-| 400 Bad Request | Campos requeridos ausentes en el body |
-| 404 Not Found | Recurso solicitado no existe |
-| 500 Internal Server Error | Fallo inesperado del servidor |
+| `200` | OK - Éxito general (GET, PUT, PATCH) |
+| `201` | Created - Creación de recursos (POST, PUT exitoso) |
+| `204` | No Content - Eliminación exitosa (DELETE) |
+| `400` | Bad Request - Campos requeridos ausentes en el body |
+| `404` | Not Found - Recurso solicitado no existe |
+| `405` | Method Not Allowed - Método HTTP no permitido |
+| `500` | Internal Server Error - Fallo inesperado del servidor |
 
 ## Cabeceras
 
-- `Content-Type: application/json; charset=utf-8` (negociación de contenido en cada respuesta).
-- `X-API-Version: 1` (cabecera personalizada de versionado en URI: `/api/v1`).
-- `X-Request-Id` (identificador por solicitud para trazabilidad).
-- `X-API-Key` (cabecera entrante opcional que se registra en el log del servidor).
+- `X-API-Version: 1` - Cabecera personalizada de versionado en URI: `/api/v1`
+- `X-Request-Id` - Identificador por solicitud para trazabilidad
+- `X-API-Key` - Cabecera entrante opcional que se registra en el log del servidor
+- `Content-Type: application/json; charset=utf-8` - Negociación de contenido en cada respuesta
 
 ## Versionamiento del código
 
@@ -220,3 +203,8 @@ DELETE /api/v1/workouts/107
 | `feat/users` | Recurso Usuarios | diseño/estructura, GET, POST, PUT/PATCH/DELETE |
 | `feat/exercises` | Recurso Ejercicios | GET catálogo y detalle |
 | `feat/workouts` | Recurso Entrenamientos | CRUD + ejercicios anidados + HATEOAS |
+| `feat/progress` | Recurso Progress | CRUD básico de seguimiento |
+
+## Autenticación
+
+**None implementado.** La API es abierta sin validación de tokens ni gestión de sesiones.
