@@ -7,8 +7,23 @@ let workouts = [
     status: "Pendiente",
     comments: "..",
     created_at : "2025-09-12T12:00:00Z"
-    
-  }
+  },
+  {
+  id: "2",
+  name: "Rutina pierna y abdomen",
+  scheduled_date: "1:00 H",
+  status: "Completado",
+  comments: "Buen ritmo, aumentar peso en sentadilla",
+  created_at: "2025-09-13T09:15:00Z"
+},
+{
+  id: "3",
+  name: "Cardio e intensidad",
+  scheduled_date: "0:45 H",
+  status: "En proceso",
+  comments: "Ajustar descansos entre series",
+  created_at: "2025-09-14T16:30:00Z"
+}
 ];
 
 // GET /api/v1/workouts
