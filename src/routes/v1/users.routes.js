@@ -7,6 +7,7 @@ const {
   getUsersId,
   postUsers,
   putUsers,
+  patchUsers,
   deleteUsers
 } = require('../../controllers/users.controller');
 
@@ -17,6 +18,8 @@ router.get('/:id', getUsersId);
 router.post('/', postUsers);
 
 router.put('/:id', putUsers);
+
+router.patch('/id', patchUsers);
 
 router.delete('/:id', deleteUsers);
 
