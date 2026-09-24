@@ -13,15 +13,15 @@ const {
 
 router.get('/', getUsers);
 
-router.get('/:id', getUsersId);
+router.get('/id', getUsersId);
 
 router.post('/', postUsers);
 
-router.put('/:id', putUsers);
+router.put('/id', putUsers);
 
 router.patch('/id', patchUsers);
 
-router.delete('/:id', deleteUsers);
+router.delete('/id', deleteUsers);
 
 module.exports = router;
 
