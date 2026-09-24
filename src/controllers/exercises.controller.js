@@ -7,7 +7,23 @@ let exercises = [
     category: "Fuerza",
     muscle_group: "Pecho",
     difficulty_level: "Dificil"
-  }
+  },
+  {
+  id: "2",
+  name: "Sentadilla con barra",
+  description: "Flexión y extensión de rodillas soportando peso en la espalda",
+  category: "Fuerza",
+  muscle_group: "Piernas",
+  difficulty_level: "Intermedio"
+},
+{
+  id: "3",
+  name: "Dominadas",
+  description: "Tracción corporal colgado de una barra fijada en alto",
+  category: "Calistenia",
+  muscle_group: "Espalda",
+  difficulty_level: "Dificil"
+}
 ];
 
 // GET /api/v1/exercises
