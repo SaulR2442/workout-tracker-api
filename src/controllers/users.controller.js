@@ -1,12 +1,26 @@
 // Estado en memoria (simulación)
 let users = [
   {
-    id: "b42f53fa-7b30-4b91-8d36-dc1c6ef27611",
+    id: "1",
     name: "Carlos Navia",
     email: "carlos@example.com",
     role: "user",
     createdAt: "2025-09-12T12:00:00Z"
-  }
+  },
+  {
+  id: "2",
+  name: "Mariana Gómez",
+  email: "mariana@example.com",
+  role: "admin",
+  createdAt: "2025-10-01T08:30:00Z"
+},
+{
+  id: "3",
+  name: "Santiago Restrepo",
+  email: "santiago@example.com",
+  role: "user",
+  createdAt: "2025-11-15T14:20:00Z"
+}
 ];             
 
 // GET /api/v1/users
