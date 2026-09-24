@@ -5,7 +5,20 @@ let progress = [
     sets: "3",
     weight: "20kg",
     repetitions: "7"
-  }
+  },
+  {
+  id: "2",
+  sets: "4",
+  weight: "50kg",
+  repetitions: "10"
+},
+{
+  id: "3",
+  sets: "3",
+  weight: "15kg",
+  repetitions: "12"
+}
+
 ];
 
 // GET /api/v1/progress
