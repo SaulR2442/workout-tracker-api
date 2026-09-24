@@ -6,6 +6,7 @@ const {
   getExercisesId,
   postExercises,
   putExercise,
+  patchExercise,
   deleteExercises
 } = require ('../../controllers/exercises.controller')
 
@@ -16,6 +17,8 @@ router.get('/id', getExercisesId)
 router.post('/', postExercises)
 
 router.put('/id', putExercise)
+
+router.patch('/id', patchExercise)
 
 router.delete('/id', deleteExercises)
 
