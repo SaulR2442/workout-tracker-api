@@ -75,6 +75,28 @@ const putWorkouts = ((req, res) => {
   res.status(200).json(workouts[index]);     // 7
 });
 
+// PATCH /workouts/:id
+const patchWorkouts = ((req, res) => {
+  const { id } = req.params;
+  const updates = req.body;
+
+  const index = workouts.findIndex(u => u.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Rutina no encontrada' });
+  }
+
+  if (Object.keys(updates).length === 0) {
+    return res.status(400).json({ error: 'Debe proporcionar al menos un campo para actualizar' });
+  }
+
+  workouts[index] = {
+    ...workouts[index],
+    ...updates
+  };
+
+  res.status(200).json(workouts[index]);
+});
+
 // DELETE /workouts/:id
 const deleteWorkouts = ((req, res) => {
   const { id } = req.params;                            // 1
@@ -93,6 +115,7 @@ module.exports = {
     getWorkoutsId,
     postWorkouts,
     putWorkouts,
+    patchWorkouts,
     deleteWorkouts
 }
 

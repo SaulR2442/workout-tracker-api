@@ -17,6 +17,8 @@ router.post('/', postWorkouts)
 
 router.put('/id', putWorkouts)
 
+router.patch('/id', patchWorkouts)
+
 router.delete('/id', deleteWorkouts)
 
 module.exports = router;
