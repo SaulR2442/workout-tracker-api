@@ -69,6 +69,28 @@ const putProgress = ((req, res) => {
   res.status(200).json(progress[index]);     // 7
 });
 
+// PATCH /progress/:id
+const patchProgress = ((req, res) => {
+  const { id } = req.params;
+  const updates = req.body;
+
+  const index = progress.findIndex(u => u.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Progreso no encontrado' });
+  }
+
+  if (Object.keys(updates).length === 0) {
+    return res.status(400).json({ error: 'Debe proporcionar al menos un campo para actualizar' });
+  }
+
+  progress[index] = {
+    ...progress[index],
+    ...updates
+  };
+
+  res.status(200).json(progress[index]);
+});
+
 // DELETE /progress/:id
 const deleteProgress = ((req, res) => {
   const { id } = req.params;                            // 1
@@ -87,5 +109,6 @@ module.exports = {
     getProgressId,
     postProgress,
     putProgress,
+    patchProgress,
     deleteProgress
 }
