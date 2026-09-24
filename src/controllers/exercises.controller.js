@@ -75,6 +75,32 @@ const putExercise = ((req, res) => {
   res.status(200).json(exercises[index]);     // 7
 });
 
+// PATCH /exercises/:id
+const patchExercise = ((req, res) => {
+  const { id } = req.params;
+  const updates = req.body; // Campos opcionales enviados por el cliente
+
+  // 1. Buscar si el ejercicio existe
+  const index = exercises.findIndex(u => u.id === id);
+  if (index === -1) {
+    return res.status(404).json({ error: 'Ejercicio no encontrado' });
+  }
+
+  // 2. Validar que al menos se envíe un campo para actualizar
+  if (Object.keys(updates).length === 0) {
+    return res.status(400).json({ error: 'Debe proporcionar al menos un campo para actualizar' });
+  }
+
+  // 3. Sobrescribir únicamente los campos recibidos manteniendo el resto
+  exercises[index] = {
+    ...exercises[index],
+    ...updates
+  };
+
+  // 4. Responder con el ejercicio actualizado
+  res.status(200).json(exercises[index]);
+});
+
 // DELETE /exercises/:id
 const deleteExercises = ((req, res) => {
   const { id } = req.params;                            // 1
@@ -93,5 +119,6 @@ module.exports = {
     getExercisesId,
     postExercises,
     putExercise,
+    patchExercise,
     deleteExercises
 }
